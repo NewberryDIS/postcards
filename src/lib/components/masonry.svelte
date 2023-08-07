@@ -28,7 +28,7 @@ let bpThumbnails, imageLinks
 
 <MasonryGrid
     class="images"
-    id="images"
+    id='images'
     {align}
     {gap}
     {defaultDirection}>

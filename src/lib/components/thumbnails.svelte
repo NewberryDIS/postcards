@@ -169,6 +169,7 @@ import BiggerPicture from 'bigger-picture/svelte';
         display: flex;
         flex-direction: column;
         contain: strict;
+        z-index: var(--layer-5);
     }
     .thumbnail-bp {
         flex-grow: 1;
@@ -179,7 +180,7 @@ import BiggerPicture from 'bigger-picture/svelte';
         height: 75px;
         position: relative;
         background: #12161A;
-        z-index: 9999;
+        z-index: var(--layer-5);
         transition: opacity 0.4s;
     }
     .thumbnails > div {
