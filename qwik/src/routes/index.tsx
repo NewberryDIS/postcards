@@ -2,8 +2,23 @@ import { component$, useStylesScoped$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from "./index.css?inline";
 import type APIData from "~/types.d.ts";
-import mainGalleries from "./mainGalleries";
+// import mainGalleries from "gallery_data.json";
 
+import Redis from "ioredis";
+const redis = new Redis({
+  host: "127.0.0.1",
+  port: 6379,
+});
+async function getApiData() {
+  const data = await redis.get("maingallerydata");
+  if (!data) {
+    // handle error
+    console.log("FIX ITTTTT");
+  }
+  return JSON.parse(data);
+}
+
+const mainGalleries = await getApiData();
 export function slugify(string: String) {
   return string
     .normalize("NFKD")
@@ -23,7 +38,6 @@ export function getWidth(w: number, h: number) {
 const holidays = [
   "Valentine's Day",
   "Easter",
-  "Back to School",
   "Halloween",
   "Thanksgiving",
   "Christmas",
@@ -34,7 +48,7 @@ const nhGalleries = mainGalleries.filter((f) => !holidays.includes(f.title));
 function imgElementer(data: APIData.Postcard[]) {
   return data.map((item) => (
     <a
-      href={`/${slugify(item.title)}`}
+      href={`/postcard-gallery/${slugify(item.title)}`}
       class={`tile ${holidays.includes(item.title) ? "htile" : "nhtile"}`}
       key={item.image}
     >
@@ -94,7 +108,19 @@ export default component$(() => {
               >
                 50,000 digitized postcards
               </a>{" "}
-              at Newberry Digital Collections, or explore the themed sets below.
+              at Newberry Digital Collections, or explore the themed sets
+              featured here.
+            </p>
+            <p class="text-base">
+              The Newberry needs your help! Please assist with making our
+              postcard collections more accessible:{" "}
+              <a
+                href="https://www.zooniverse.org/projects/newberry/postcard-tag"
+                target="_blank"
+                class="llines"
+              >
+                Postcard Tag
+              </a>
             </p>
             <p class="text-sm">
               With gratitude to the Library of Congress for its{" "}

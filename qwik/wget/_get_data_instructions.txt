@@ -1,0 +1,31 @@
+I need a python script that will do an api call, iterate over the returned data, make additional API calls based on the initial response, and create a list of dictionaries, which the script should save as JSON to an output file.
+To obtain the data, the script will need to do the following: 
+
+First, get the json contents at the following url: 
+
+`https://collections.newberry.org/API/PackageExtractor/v1.0/Extract?Package=2KXJ8ZSA9MFDO&ContentFields=MediaEncryptedIdentifier&format=json`
+
+In that data, there is an array, located at:  
+
+`[top level of data].APIResponse.Content` 
+
+Each element of the array is an object, with the field `MediaEncryptedIdentifier`
+
+For each item, use the `MediaEncryptedIdentifier` in the `id` of this concatenation: 
+
+`'https://collections.newberry.org/API/PackageExtractor/v1.0/Extract?Package=' + id + '&PackageFields=SystemIdentifier,MediaEncryptedIdentifier,Title,new.Context&RepresentativeFields=SystemIdentifier,MediaEncryptedIdentifier,Title,MaxWidth,MaxHeight&ContentFields=SystemIdentifier,MediaEncryptedIdentifier,Title,CoreField.IIIFResourceType&format=json'`
+
+and get that data. 
+
+For each of these, the script should create an object that will be appended to the output of the script; the data can be assigned in this way: (I will call the top level of the json data 'data')
+```
+    {
+        title: data.APIResponse.Title,
+        image: data.APIResponse.Representative.MediaEncryptedIdentifier,
+        imageTitle: data.APIResponse.Representative.Title,
+        width: data.APIResponse.Representative.MaxWidth,
+        height: data.APIResponse.Representative.MaxHeight,
+        link: data.APIResponse.MediaEncryptedIdentifier 
+    }
+```
+After appending all of the objects to the output array, the array should be saved in pretty printed JSON format to the file 'gallery_data.json'

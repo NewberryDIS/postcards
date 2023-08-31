@@ -26,6 +26,11 @@ main,
   z-index: 1;
   min-height: 100vh;
 }
+.logo {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
 .left .text-lg {
   font-size: 1.25rem;
 }

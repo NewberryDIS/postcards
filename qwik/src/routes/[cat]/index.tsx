@@ -5,15 +5,25 @@ import { slugify } from "..";
 import styles from "./index.css?inline";
 import type APIData from "~/types.d.ts";
 import { BiggerPictureComponent } from "~/components/bigger-picture/bigger-picture";
-// export const pageData = server$(async function () {
+import ImgNewberrylogo from "/public/NewberryLogo.png?jsx";
+import { getApiData } from "./redis";
+
+// const starter = "2KXJ8ZSAKD6V9";
+const packageExtractor = [
+  "https://collections.newberry.org/API/PackageExtractor/v1.0/Extract?Package=",
+  "&PackageFields=Corefield.Purpose,SystemIdentifier,Title,MediaEncryptedIdentifier,new.Context&RepresentativeFields=Corefield.Purpose,SystemIdentifier,MediaEncryptedIdentifier,Title,MaxWidth,MaxHeight&ContentFields=SystemIdentifier,MediaEncryptedIdentifier,Title,CoreField.IIIFResourceType,Purpose&format=json",
+];
+
+// async function testRedisCaching() {
+//   const data = await getApiData(
+//     packageExtractor[0] + starter + packageExtractor[1],
+//   );
+//   console.log(data);
+// }
+
+// testRedisCaching();
+
 export const useGetPageData = routeLoader$(async (requestEvent) => {
-  // const loc = useLocation();
-
-  const packageExtractor = [
-    "https://collections.newberry.org/API/PackageExtractor/v1.0/Extract?Package=",
-    "&PackageFields=Corefield.Purpose,SystemIdentifier,Title,MediaEncryptedIdentifier,new.Context&RepresentativeFields=Corefield.Purpose,SystemIdentifier,MediaEncryptedIdentifier,Title,MaxWidth,MaxHeight&ContentFields=SystemIdentifier,MediaEncryptedIdentifier,Title,CoreField.IIIFResourceType,Purpose&format=json",
-  ];
-
   const slugs: { [key: string]: string } = {
     "womens-rights": "2KXJ8ZSA9MW04",
     "reading-and-writing": "2KXJ8ZSAKD0AX",
@@ -34,17 +44,13 @@ export const useGetPageData = routeLoader$(async (requestEvent) => {
     halloween: "2KXJ8ZSAKDX4O",
   };
 
-  // const starter = '2KXJ8ZSAKD6V9';
-
   const packageMEI = slugs[requestEvent.params.cat];
 
-  // Make the first API call and get the response.
-  const response = await fetch(
+  const response = await getApiData(
     packageExtractor[0] + packageMEI + packageExtractor[1],
   );
-
-  // Iterate over the data in the response.
-  const data = await response.json();
+  console.log("response", response);
+  const data = await response;
   const results = [];
   const postCardGallery: APIData.Gallery = {
     pageMEI: data.APIResponse.MediaEncryptedIdentifier,
@@ -54,14 +60,14 @@ export const useGetPageData = routeLoader$(async (requestEvent) => {
   };
   for (const item of data.APIResponse.Content) {
     // Make a new API call using the value of the MediaEncryptedIdentifier property.
-    const newResponse = await fetch(
+    const newResponse = await getApiData(
       packageExtractor[0] + item.MediaEncryptedIdentifier + packageExtractor[1],
     );
     // console.log(
     //   packageExtractor[0] + item.MediaEncryptedIdentifier + packageExtractor[1],
     // );
     // Add the response from the new API call to an array.
-    results.push((await newResponse.json()) as APIData.CortexAPIData);
+    results.push((await newResponse) as APIData.CortexAPIData);
   }
   // Return the array.
   const postcardData: APIData.Postcard[] = results.map((response) => {
@@ -92,6 +98,11 @@ export default component$(() => {
     <>
       <main>
         <div class="left">
+          <div class="logo">
+            <a href="/">
+              <ImgNewberrylogo style={{ height: "60px", width: "300px" }} />
+            </a>
+          </div>
           <div class="title">
             <h3>Free to Use and Reuse:</h3>
             {pageData.value.pageTitle
@@ -104,7 +115,7 @@ export default component$(() => {
           </div>
           <div class="text-content">
             <p class="text-lg">
-              Featured below are some staff favorites from the Newberry’s
+              Featured here are some staff favorites from the Newberry’s
               collection. View more free to use and reuse images at our{" "}
               <a
                 href="https://collections.newberry.org/CS.aspx?VP3=DamView&VBID=2KXJA4UE6RXM&PN=1"
