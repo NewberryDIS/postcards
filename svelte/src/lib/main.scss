@@ -1,0 +1,117 @@
+html {
+	--flame: 241, 97, 81;
+	--parkGreen: 32, 84, 62;
+	--tile: 146, 88, 64;
+	--sapphire: 64, 81, 163;
+	--lake: 126, 196, 226;
+	--mulberry: 173, 43, 90;
+	--lavender: 205, 184, 209;
+	--midnight: 17, 26, 42;
+	--sand: 234, 220, 201;
+	--granite: 234, 235, 231;
+
+	--brand-light: rgb(var(--sapphire));
+	--text-1-light: rgb(var(--midnight));
+	--text-2-light: rgb(var(--mulberry));
+	--surface-1-light: rgb(var(--granite));
+	--surface-2-light: rgb(var(--lavender));
+	--surface-3-light: rgb(var(--granite));
+	--surface-4-light: var(--gray-3);
+
+	// --brand-dark: rgb(var(--sapphire));
+	// --text-1-dark: rgb(var(--granite));
+	// --text-2-dark: rgb(var(--lavender));
+	// --surface-1-dark: rgb(var(--midnight));
+	// --surface-2-dark: rgb(var(--parkGreen));
+	// --surface-3-dark: rgb(var(--midnight));
+	--surface-1: linear-gradient(210deg, var(--surface-3) 0vw, 40vw, var(--surface-2) 40vw 100vw);
+	--surface-4: linear-gradient(210deg, var(--surface-2) 0vw, 40vw, var(--surface-3) 40vw 100vw);
+}
+
+:root {
+	--brand: var(--brand-light);
+	--text-1: var(--text-1-light);
+	--text-2: var(--text-2-light);
+	--surface-2: var(--surface-2-light);
+	--surface-3: var(--surface-3-light);
+	// --surface-4: var(--surface-4-light);
+}
+// @media (prefers-color-scheme: dark) {
+// 	:root {
+// --brand: var(--brand-dark);
+// --text-1: var(--text-1-dark);
+// --text-2: var(--text-2-dark);
+// --surface-2: var(--surface-2-dark);
+// --surface-3: var(--surface-3-dark);
+// 	}
+// }
+
+@font-face {
+	font-family: 'flecha';
+	src: url('/fonts/FlechaM-Regular.woff');
+}
+@font-face {
+	font-family: 'styrene';
+	src: url('/fonts/StyreneB-Regular-Web.woff');
+}
+@font-face {
+	font-family: 'styrene-bold';
+	src: url('/fonts/StyreneB-Bold-Web.woff');
+}
+@font-face {
+	font-family: 'signifier';
+	src: url('/fonts/signifier-regular.woff2');
+}
+@font-face {
+	font-family: 'signifier-bold';
+	src: url('/fonts/signifier-bold.woff2');
+}
+
+h1,
+h2,
+h {
+	font-family: 'flecha';
+	color: var(--brand);
+}
+h3,
+h4,
+h5,
+h6,
+dt,
+.item-title {
+	font-family: 'styrene';
+	color: var(--brand);
+}
+
+body,
+html {
+	font-family: 'signifier';
+}
+
+b {
+	font-family: 'styrene-bold';
+}
+
+.llines {
+	color: inherit !important;
+	text-decoration: none;
+	background: linear-gradient(to right, rgba(var(--text-1), 0.3), rgba(var(--text-1), 0.3)),
+		linear-gradient(to right, rgba(var(--text-1), 1), rgba(var(--text-1), 1));
+	/* background: linear-gradient(to right,transparent, var(--surface-1)),
+linear-gradient(to right, var(--text-1),  var(--text-1), transparent); */
+	background-size: 100% 0.1rem, 0 0.1rem;
+	background-position: 100% 100%, 0 100%;
+	background-repeat: no-repeat;
+	transition: background-size 400ms;
+}
+.core a:not(.no-lines):hover,
+.core a:not(.no-lines):focus,
+.llines:hover,
+.llines:focus {
+	background-size: 0 0.1rem, 100% 0.1rem;
+}
+
+body {
+	background: var(--surface-1);
+	background-attachment: fixed !important;
+}
