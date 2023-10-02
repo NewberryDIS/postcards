@@ -1,76 +1,9 @@
-import { component$, useStylesScoped$ } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
-import styles from "./index.css?inline";
-import type APIData from "~/types.d.ts";
-import mainGalleries from "./gallery_data.json";
+<script>
+    import allGalleries from '$lib/gallery_data.json'
 
-// import Redis from "ioredis";
-// const redis = new Redis({
-//   host: "127.0.0.1",
-//   port: 6379,
-// });
-// async function getApiData() {
-//   const data = await redis.get("maingallerydata");
-//   if (!data) {
-//     // handle error
-//     console.log("FIX ITTTTT");
-//   }
-//   return JSON.parse(data);
-// }
-//
-// const mainGalleries = await getApiData();
+</script>
 
-export function slugify(string: String) {
-  console.log(string);
-  return string
-    .normalize("NFKD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
 
-export function getWidth(w: number, h: number) {
-  // w:h::x:300
-  return (w * 300) / h;
-}
-
-const holidays = [
-  "Valentine's Day",
-  "Easter",
-  "Halloween",
-  "Thanksgiving",
-  "Christmas",
-];
-// console.log(mainGalleries);
-const hGalleries = mainGalleries.filter((f) => holidays.includes(f.title));
-const nhGalleries = mainGalleries.filter((f) => !holidays.includes(f.title));
-function imgElementer(data: APIData.Postcard[]) {
-  return data.map((item) => (
-    <a
-      href={`/postcard-gallery/${
-        item.title ? slugify(item.title) : JSON.stringify(item)
-      }`}
-      class={`tile ${holidays.includes(item.title) ? "htile" : "nhtile"}`}
-      key={item.image}
-    >
-      <img
-        width={getWidth(parseInt(item.width), parseInt(item.height))}
-        height="300"
-        src={`https://collections.newberry.org/IIIF3/Image/${item.image}/full/,300/0/default.jpg`}
-        alt={`a ${item.title} postcard`}
-      />
-      <h3>{item.title}</h3>
-    </a>
-  ));
-}
-export default component$(() => {
-  useStylesScoped$(styles);
-  // console.log(pageData.value);
-  return (
-    <>
       <main>
         <div class="left">
           <div class="title">
@@ -162,18 +95,4 @@ export default component$(() => {
             {imgElementer(hGalleries)}
           </div>
         </div>
-        {/* <div class="right vert">{imgElements}</div> */}
       </main>
-    </>
-  );
-});
-
-export const head: DocumentHead = {
-  title: "Newberry Postcard Gallery",
-  meta: [
-    {
-      name: "description",
-      content: "Curated galleries from the Newberry collection of postcards",
-    },
-  ],
-};

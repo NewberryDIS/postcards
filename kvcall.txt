@@ -1,0 +1,13 @@
+
+import { routeLoader$, type DocumentHead } from "@builder.io/qwik-city";
+import { kv } from "@vercel/kv";
+
+
+const mei = "2KXJ8ZSA9MFDO";
+
+export const useKvData = routeLoader$(async () => {
+  const data = await kv.get(mei);
+  return data;
+});
+
+{pageData.value.map((d) => {})}
